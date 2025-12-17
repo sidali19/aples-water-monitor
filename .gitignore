@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+.env/
+.pytest_cache/
+data/
+.dagster_home/
+.tmp_*/

@@ -1,0 +1,13 @@
+dagster==1.12.6
+dagster-webserver==1.12.6
+
+minio
+numpy
+pandas
+rasterio
+requests
+shapely
+
+sentinelhub
+python-dotenv
+pytest>=7,<8

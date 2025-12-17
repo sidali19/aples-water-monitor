@@ -1,0 +1,64 @@
+{
+  "type": "FeatureCollection",
+  "properties": {
+    "location_id": "saint_cassien",
+    "location_name": "Lac de Saint-Cassien",
+    "bbox": [6.80, 43.585, 6.82, 43.60]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "field_id": "sc_field_1",
+        "name": "Saint-Cassien North Bay",
+        "monitoring_start": "2024-04-01"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [6.808, 43.592],
+          [6.814, 43.592],
+          [6.814, 43.596],
+          [6.808, 43.596],
+          [6.808, 43.592]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "field_id": "sc_field_2",
+        "name": "Saint-Cassien Center",
+        "monitoring_start": "2024-03-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [6.808, 43.588],
+          [6.816, 43.588],
+          [6.816, 43.592],
+          [6.808, 43.592],
+          [6.808, 43.588]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "field_id": "sc_field_3",
+        "name": "Saint-Cassien South Shore",
+        "monitoring_start": "2024-03-10"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [6.804, 43.586],
+          [6.812, 43.586],
+          [6.812, 43.590],
+          [6.804, 43.590],
+          [6.804, 43.586]
+        ]]
+      }
+    }
+  ]
+}
