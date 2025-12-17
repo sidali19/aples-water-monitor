@@ -36,16 +36,3 @@ def fetch_ndwi_for_bbox(bbox: BBox, date: dt.date, config: NDWIConfig) -> Path:
         out_dir=str(config.out_dir),
     )
     return raw_path
-
-def compute_water_metrics(ndwi_array: np.ndarray, threshold: float = 0.0) -> Dict[str, float]:
-    mean_ndwi = float(np.mean(ndwi_array))
-    water_fraction = float(np.mean(ndwi_array > threshold))
-    ndwi_min = float(np.min(ndwi_array))
-    ndwi_max = float(np.max(ndwi_array))
-    logger.debug("NDWI stats: min=%.3f max=%.3f mean=%.3f", ndwi_min, ndwi_max, mean_ndwi)
-    return {
-        "mean_ndwi": mean_ndwi,
-        "water_fraction": water_fraction,
-        "ndwi_min": ndwi_min,
-        "ndwi_max": ndwi_max,
-    }

@@ -16,12 +16,14 @@ class MetricsConfig:
     water_threshold_strong: float = 0.2
     all_touched: bool = True
 
-def _compute_field_metrics(
+
+def compute_field_metrics_from_ndwi(
     ndwi_real: np.ndarray,
     field_config: FieldConfig,
     date: dt.date,
-    metrics_cfg: MetricsConfig,
+    metrics_cfg: MetricsConfig | None = None,
 ) -> List[Dict[str, Any]]:
+    
     results: List[Dict[str, Any]] = []
     height, width = ndwi_real.shape
 
@@ -53,20 +55,6 @@ def _compute_field_metrics(
         )
 
     return results
-
-def compute_field_metrics_from_ndwi(
-    ndwi_real: np.ndarray,
-    field_config: FieldConfig,
-    date: dt.date,
-    metrics_cfg: MetricsConfig | None = None,
-) -> List[Dict[str, Any]]:
-    return _compute_field_metrics(
-        ndwi_real,
-        field_config,
-        date,
-        metrics_cfg or MetricsConfig(),
-    )
-
 def compute_deltas(df_today: pd.DataFrame, df_yest: pd.DataFrame) -> pd.DataFrame:
     required = {"field_id", "field_name", "mean_ndwi", "water_fraction_pos", "water_fraction_strong"}
     missing_today = required - set(df_today.columns)

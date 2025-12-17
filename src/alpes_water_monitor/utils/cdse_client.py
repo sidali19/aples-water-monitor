@@ -24,7 +24,6 @@ PROCESS_URL = "https://sh.dataspace.copernicus.eu/api/v1/process"
 CDSE_CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
 DEFAULT_DATASET = "sentinel-2-l2a"
 
-EPS = 1e-6
 DEFAULT_TIMEOUT = 60
 
 

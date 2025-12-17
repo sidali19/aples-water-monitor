@@ -17,15 +17,6 @@ def test_build_time_interval():
     assert end == "2024-04-13T23:59:59Z"
 
 
-def test_compute_water_metrics():
-    arr = np.array([[0.5, -0.5], [0.0, 0.25]])
-    metrics = ndwi.compute_water_metrics(arr, threshold=0.0)
-    assert metrics["mean_ndwi"] == float(np.mean(arr))
-    assert metrics["water_fraction"] == float(np.mean(arr > 0.0))
-    assert metrics["ndwi_min"] == float(np.min(arr))
-    assert metrics["ndwi_max"] == float(np.max(arr))
-
-
 def test_fetch_ndwi_for_bbox_monkeypatched(monkeypatch, tmp_path):
     fake_array = np.ones((1, 1), dtype=np.float32) * 0.75  # [0,1] from fetch_ndwi
 

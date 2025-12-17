@@ -1,13 +1,13 @@
 # Alpes Water Monitor
 
-Dagster pipeline to monitor surface water over Alpes-Maritimes (Saint‑Cassien example). It:
-- Fetches Sentinel‑2 NDWI from Copernicus Data Space Ecosystem (CDSE).
+Dagster pipeline to monitor surface water over Alpes-Maritimes (Saint-Cassien example). It:
+- Fetches Sentinel-2 NDWI from Copernicus Data Space Ecosystem (CDSE).
 - Stores raw NDWI PNGs (human-friendly) in MinIO (S3-compatible).
 - Computes daily per-field NDWI metrics, day-over-day deltas, and a daily summary.
 - Exchanges data between assets via `s3://<bucket>/<key>` URIs in MinIO.
 
 ## NDWI & CDSE (context)
-- **NDWI**: Normalized Difference Water Index. Higher → more water-like.
+- **NDWI**: Normalized Difference Water Index. Higher -> more water-like.
 - **CDSE**: Copernicus Data Space Ecosystem (https://dataspace.copernicus.eu/). Create an account, register an app, and get `client_id` / `client_secret`.
 
 ## Entrypoint: geometry & config
@@ -17,17 +17,17 @@ Dagster pipeline to monitor surface water over Alpes-Maritimes (Saint‑Cassien 
 ## Code walkthrough (high level)
 - `dagster_app/`: assets + definitions (orchestration only).
 - `services/field_metrics.py`: domain logic (per-field metrics, deltas, summary) + `MetricsConfig` (thresholds, raster all_touched).
-- `utils/`: CDSE client, NDWI fetch (returns raw PNG path), NDWI loader (PNG → grayscale → validated 2D → float32 NDWI for metrics), MinIO storage helpers, rasterization, models.
+- `utils/`: CDSE client, NDWI fetch (returns raw PNG path), NDWI loader (PNG -> grayscale -> validated 2D -> float32 NDWI for metrics), MinIO storage helpers, rasterization, models.
 - `config/`: config loaders (GeoJSON fields config).
 - `infra/`: Terraform for k3d deployment.
-- `scripts/`: helper scripts (local runs, deploy).
+- `scripts/`: helper scripts (deploy).
 - `tests/`: unit tests.
 
 End-to-end flow:
 1) `utils/ndwi.fetch_ndwi_for_bbox`: call CDSE, get raw NDWI PNG path.
 2) `utils/storage.load_ndwi_from_path`: download if `s3://`, grayscale + 2D validation, scale for metrics.
 3) `services/field_metrics.py`: rasterize masks (`utils/raster`), compute per-field metrics, compute deltas (merge on field_id), summarize.
-4) `dagster_app/assets.py`: orchestrates fetch → metrics → delta → summary, reading/writing via MinIO using `s3://...` contracts.
+4) `dagster_app/assets.py`: orchestrates fetch -> metrics -> delta -> summary, reading/writing via MinIO using `s3://...` contracts.
 
 ## Data contracts (MinIO object keys)
 - Raw NDWI PNG: `raw_ndwi/date=YYYY-MM-DD/ndwi.png`
@@ -60,8 +60,8 @@ flowchart TB
 ```
 
 ## Deployment (k3d + Terraform)
-- Preferred: `scripts/deploy_k3d_tf.sh`  
-  Builds the user-code image, imports it into k3d, and runs `terraform -chdir=infra apply` to create namespace, MinIO, Dagster webserver/daemon, and user-code deployment. Set `CDSE_CLIENT_ID/SECRET` and MinIO envs before running.
+- Local helper script: `bash scripts/deploy_k3d_tf.sh` (run from repo root). Builds the user-code image, imports it into k3d, and runs Terraform in `infra` to create namespace, MinIO, Dagster webserver/daemon, and user-code deployment.
+- Required env for the script: `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET`. MinIO env vars are optional overrides (`ALPES_MINIO_*`); defaults cover the local k3d/MinIO setup.
 - Access Dagster UI after deploy:  
   `kubectl -n alpes-water-monitor port-forward deploy/dagster-webserver 3000:3000`
 - Access MinIO console (optional):  
@@ -69,10 +69,8 @@ flowchart TB
 
 ## Configuration & secrets
 Set env vars (see `.env.example`):
-- `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET`
-- `ALPES_MINIO_ENDPOINT` (e.g., `http://minio:9000`)
-- `ALPES_MINIO_BUCKET` (default `alpes-water-monitor`)
-- `ALPES_MINIO_ACCESS_KEY`, `ALPES_MINIO_SECRET_KEY`
+- Required: `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET`
+- Optional MinIO overrides: `ALPES_MINIO_ENDPOINT` (e.g., `http://minio:9000`), `ALPES_MINIO_BUCKET` (default `alpes-water-monitor`), `ALPES_MINIO_ACCESS_KEY`, `ALPES_MINIO_SECRET_KEY`
 
 Kubernetes secret example:
 ```bash
