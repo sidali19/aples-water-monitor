@@ -47,12 +47,12 @@ End-to-end flow:
 
 ```mermaid
 flowchart TB
-    subgraph Namespace: alpes-water-monitor
-        MINIO[Deployment: minio\nSvc: minio:9000/9001]
-        DAGWEB[Deployment: dagster-webserver\nSvc: dagster-webserver:3000]
-        DAGDAEMON[Deployment: dagster-daemon]
-        USER[Deployment: alpes-monitor-app\n(user code + assets)]
-        SEC[Secrets: cdse-credentials, minio creds]
+    subgraph "Namespace: alpes-water-monitor"
+        MINIO["Deployment: minio<br/>Svc: minio:9000/9001"]
+        DAGWEB["Deployment: dagster-webserver<br/>Svc: dagster-webserver:3000"]
+        DAGDAEMON["Deployment: dagster-daemon"]
+        USER["Deployment: alpes-monitor-app<br/>(user code + assets)"]
+        SEC["Secrets: cdse-credentials, minio creds"]
         USER -->|S3 ops| MINIO
         DAGWEB -. gRPC/HTTP .- USER
         DAGDAEMON -. gRPC/HTTP .- USER
@@ -99,4 +99,3 @@ PYTHONPATH=./src pytest
 2. Register an app to get `client_id` and `client_secret`.
 3. Create/update the `cdse-credentials` secret in the cluster (see above).
 4. Ensure MinIO env vars are set in deployments.
-
