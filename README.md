@@ -81,6 +81,13 @@ kubectl -n alpes-water-monitor create secret generic cdse-credentials \
   --from-literal=client_secret=YOUR_SECRET
 ```
 
+## Prerequisites
+- Python 3.11+
+- Docker
+- k3d
+- kubectl
+- Terraform
+
 ## Local development
 ```bash
 python -m venv .env
