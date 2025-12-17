@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Optional
 import os
 import tempfile
+from urllib.parse import urlparse
 
 from dagster import AssetExecutionContext
 from minio import Minio
@@ -11,18 +12,17 @@ from PIL import Image
 import pandas as pd
 
 
+
+
 def get_minio_client() -> Optional[Minio]:
-    endpoint = os.getenv("ALPES_MINIO_ENDPOINT")
-    if not endpoint:
+    endpoint_raw = os.getenv("ALPES_MINIO_ENDPOINT")
+    if not endpoint_raw:
         return None
 
-    secure = False
-    if endpoint.startswith("http://"):
-        endpoint = endpoint[len("http://") :]
-        secure = False
-    elif endpoint.startswith("https://"):
-        endpoint = endpoint[len("https://") :]
-        secure = True
+    parsed = urlparse(endpoint_raw)
+
+    secure = parsed.scheme == "https"
+    endpoint = parsed.netloc or parsed.path  
 
     access_key = os.getenv("ALPES_MINIO_ACCESS_KEY", "minioadmin")
     secret_key = os.getenv("ALPES_MINIO_SECRET_KEY", "minioadmin")

@@ -4,6 +4,7 @@ from typing import List
 import json
 import datetime as dt
 import logging
+from functools import lru_cache
 import os
 
 from shapely.geometry import shape, Polygon
@@ -74,6 +75,7 @@ def load_field_config_from_env(env_var: str = "ALPES_FIELDS_CONFIG") -> FieldCon
         raise EnvironmentError(env_var)
     return load_field_config(Path(path_val))
 
+@lru_cache(maxsize=1)
 def default_st_cassien_config() -> FieldConfig:
     path = Path(__file__).resolve().parents[3] / "etc" / "fields_st_cassien.geojson"
     return load_field_config(path)
